@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% set sites = ["Crunchyroll", "Funimation", "HIDIVE", "Toonami"] %}
+
+{% block main %}
+<h1>AnimeCal</h1>
+<p>Pick a schedule:</p>
+<section id="sites">
+	<ul>
+		{% for site in sites %}
+		{% set lower = site | lower %}		
+		{% set view = "views." + lower + "_" %}		
+		<li>
+			{{site}}
+			<ul>
+				<li>
+					<a {{ {"href": url_for(view + "cal")} | xmlattr }}>iCalendar</a>
+				</li>
+				<li>
+					<a {{ {"href": url_for(view + "json")} | xmlattr }}>JSON</a>
+				</li>
+			</ul>
+		</li>
+		{% endfor %}
+	</ul>
+</section>
+{% endblock %}
