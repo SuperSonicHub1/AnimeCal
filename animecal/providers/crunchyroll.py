@@ -9,7 +9,7 @@ from ..session import session
 from ..calendar import create_calendar
 
 
-SCHEDULE_URL = "https://cc.bingj.com/cache.aspx?d=4582189182750113&w=cSvvUercM4MjvWhlVn6b4QDYZ81pMSsj"
+SCHEDULE_URL = "https://webcache.googleusercontent.com/search?q=cache:pTvtuBbmSy4J:https://www.crunchyroll.com/simulcastcalendar"
 
 def _parse_release_html(node: Node) -> dict:
 	# Episode number, show slug
