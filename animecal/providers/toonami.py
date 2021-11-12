@@ -7,36 +7,37 @@ from ..session import session
 SCHEDULE_URL = "https://www.adultswim.com/videos/toonami"
 
 def _parse_events(item: dict, apollo_state: dict) -> dict:
-	show_slug = item["show"]["id"]
-	show = apollo_state[show_slug]
-
-	show_name = show["title"]
-	show_url = f"https://www.adultswim.com/videos/{show_slug}"
-	# Gotta remove that Z
-	start_time = item["startTime"]
-	available_time = datetime.fromisoformat(start_time[:-1])
-	episode_title = item["title"]
-
-	uid = "/".join([show_slug, start_time])
-
-	# For the completeness of _original
-	item["showObject"] = show
-
-	return {
-		"show_name": show_name,
-		"show_slug": show_slug,
-		"show_url": show_url,
+	schedule_item = {
 		"season_number": None,
-		"episode_title": episode_title,
 		"episode_slug": None,
 		"episode_number": None,
-		"episode_url": show_url,
 		"description": None,
-		"available_time": available_time,
 		"thumbnail": None,
-		"uid": uid,
-		"_original": item,
 	}
+
+	# Why is dict.get not working?
+	show_slug = (item.get("show") or {}).get("id") or ""
+	if show_slug:
+		show = apollo_state[show_slug]
+		schedule_item["show_name"] = show["title"]
+		schedule_item["show_url"] = f"https://www.adultswim.com/videos/{show_slug}"
+		schedule_item["episode_title"] = item["title"]
+		# For the completeness of _original
+		item["showObject"] = show
+		schedule_item["_original"] = item
+	else:
+		schedule_item["show_name"] = item["title"]
+		schedule_item["show_url"] = f"https://www.adultswim.com/videos"
+		schedule_item["episode_title"] = None
+
+	schedule_item["episode_url"] = schedule_item["show_url"]
+
+	start_time = item["startTime"]
+	# Gotta remove that Z
+	schedule_item["available_time"] = datetime.fromisoformat(start_time[:-1])
+	schedule_item["uid"] = "/".join([show_slug, start_time])
+
+	return schedule_item
 
 def get_events():
 	res = session.get(SCHEDULE_URL)
