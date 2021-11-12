@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "animecal"
-version = "0.1.0"
+version = "1.0.0"
 description = " Simplified access to the schedules of American anime distribution networks through iCalendar and JSON."
 authors = ["Kyle Williams <kyle.anthony.williams2@gmail.com>"]
 
