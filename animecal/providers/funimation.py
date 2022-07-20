@@ -4,7 +4,7 @@ import re
 from ..session import session
 from ..calendar import create_calendar
 
-SCHEDULE_URL = "https://www.funimation.com/schedule/table/streaming/"
+SCHEDULE_URL = "http://www.funimation.com/schedule/table/streaming/"
 _JSON_REXEX = r"var scheduleItems = (.*);"
 
 def _parse_events(item: dict) -> dict:
@@ -42,7 +42,7 @@ def _parse_events(item: dict) -> dict:
 	}
 
 def get_events():
-	res = session.get(SCHEDULE_URL)
+	res = session.get(SCHEDULE_URL, verify=False)
 	res.raise_for_status()
 	text = res.text
 	matches = re.search(_JSON_REXEX, text)
